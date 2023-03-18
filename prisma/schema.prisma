@@ -1,12 +1,15 @@
 datasource db {
   provider          = "mysql"
   url               = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL") // Uncomment me to use a shadow database
   relationMode      = "prisma"
 }
 
 generator client {
-  provider = "prisma-client-js"
+  // Corresponds to the cargo alias created earlier
+  provider = "cargo prisma"
+  // The location to generate the client. Is relative to the position of the schema
+  output   = "../crates/db/src/prisma.rs"
 }
 
 model Account {
@@ -17,7 +20,7 @@ model Account {
   providerAccountId String
   refresh_token     String? @db.Text
   access_token      String? @db.Text
-  expires_at        Int?
+  expires_at        BigInt?
   token_type        String?
   scope             String?
   id_token          String? @db.Text
@@ -57,13 +60,10 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-// Above models are required for Auth.js to work
-// Below models are for the domain of the application
-
 model events {
   aggregate_type String
   aggregate_id   String
-  sequence       Int      @default(autoincrement())
+  sequence       BigInt   @default(autoincrement())
   event_type     String
   event_version  String
   payload        Json
