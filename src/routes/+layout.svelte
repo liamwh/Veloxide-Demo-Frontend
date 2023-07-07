@@ -1,5 +1,5 @@
 <script>
-	import '../app.css';
+	import '../app.scss';
 	import Navbar from '$lib/Navbar.svelte';
 	import { SvelteToast } from '@zerodevx/svelte-toast';
 </script>

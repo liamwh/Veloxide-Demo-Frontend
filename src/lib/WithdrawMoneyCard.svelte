@@ -1,56 +1,17 @@
 <script lang="ts">
-	export let accountId: string;
-	import type { BankAccountCommand } from 'src/bindings/BankAccountCommand';
-	import { PUBLIC_BANK_ACCOUNT_SERVICE_API_URL } from '$env/static/public';
-	import { toast } from '@zerodevx/svelte-toast';
+	import type { BankAccountView } from '../bindings/BankAccountView';
+	import { withdrawMoney, getBankAccount } from './bankService';
+	import { bankAccountStore } from '$lib/bankAccountStore';
+
+	export let bankAccount: BankAccountView;
 
 	let amount: number;
 	let atmId: string;
-	export async function withdrawMoney() {
-		if (amount <= 0 || amount == null) {
-			toast.push('Amount must be greater than 0');
-			return;
-		}
-		if (atmId == null) {
-			toast.push('ATM ID must be provided');
-			return;
-		}
-		let command: BankAccountCommand = {
-			WithdrawMoney: {
-				atm_id: atmId,
-				amount: amount
-			}
-		};
-		try {
-			const response = await fetch(
-				`${PUBLIC_BANK_ACCOUNT_SERVICE_API_URL}/bank-accounts/${accountId}`,
-				{
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify(command, null, 2)
-				}
-			);
-			if (!response.ok) {
-				switch (response.status) {
-					case 404:
-						toast.push('Account not found');
-						return;
-					default:
-						if (response.body) {
-							response.text().then((text) => {
-								toast.push(text);
-							});
-							return;
-						}
-						toast.push('Error fetching account');
-				}
-			}
-		} catch {
-			toast.push('Error fetching account');
-			return;
-		}
+
+	async function withdraw() {
+		await withdrawMoney(amount, atmId, bankAccount.account_id);
+		const updatedBankAccount = await getBankAccount(bankAccount.account_id);
+		bankAccountStore.set(updatedBankAccount);
 	}
 </script>
 
@@ -63,21 +24,26 @@
 				<label class="label">
 					<span class="label-text">Enter amount to withdraw</span>
 				</label>
-				<label class="input-group">
+				<label class="input-group w-full">
 					<span>ATM ID</span>
-					<input type="text" placeholder="atm-1" class="input input-bordered" bind:value={atmId} />
+					<input
+						type="text"
+						placeholder="atm-1"
+						class="input input-bordered w-full"
+						bind:value={atmId}
+					/>
 				</label>
-				<label class="input-group">
+				<label class="input-group w-full">
 					<input
 						type="number"
 						placeholder="0.01"
-						class="input input-bordered"
+						class="input input-bordered w-full"
 						bind:value={amount}
 					/>
 					<span>EUR</span>
 				</label>
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
-				<div class="btn btn-primary" on:click={withdrawMoney}>Withdraw Money</div>
+				<div class="btn btn-primary" on:click={withdraw}>Withdraw Money</div>
 			</div>
 		</div>
 	</div>
