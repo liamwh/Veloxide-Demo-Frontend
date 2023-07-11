@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import Avatar from './Avatar.svelte';
 </script>
 
 <div class="navbar bg-neutral w-screen">

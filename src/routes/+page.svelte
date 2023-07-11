@@ -1,7 +1,7 @@
 <script lang="ts">
 	import AccountPreviewCard from '$lib/AccountPreviewCard.svelte';
 
-	let accounts = ['123', '456'];
+	let accounts = ['123'];
 </script>
 
 <div class="flex flex-col w-screen">

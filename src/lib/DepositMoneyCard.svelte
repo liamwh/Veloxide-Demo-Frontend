@@ -17,7 +17,7 @@
 
 <div class="card w-96 bg-base-100 shadow-xl">
 	<div class="card-body">
-		<h2 class="card-title">Deposit Money</h2>
+		<h2 class="card-title">Deposit</h2>
 		<div class="form-control">
 			<div class="grid grid-flow-row auto-rows-max space-y-1">
 				<!-- svelte-ignore a11y-label-has-associated-control -->
@@ -34,7 +34,7 @@
 					<span>EUR</span>
 				</label>
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
-				<div class="btn btn-primary" on:click={deposit}>Deposit Money</div>
+				<div class="btn btn-primary" on:click={deposit}>Deposit</div>
 			</div>
 		</div>
 	</div>

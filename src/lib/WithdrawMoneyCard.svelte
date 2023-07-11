@@ -18,7 +18,7 @@
 <div class="card w-96 bg-base-100 shadow-xl">
 	<div class="card-body">
 		<div class="form-control">
-			<h2 class="card-title">Withdraw Money</h2>
+			<h2 class="card-title">Withdraw</h2>
 			<div class="grid grid-flow-row auto-rows-max space-y-1">
 				<!-- svelte-ignore a11y-label-has-associated-control -->
 				<label class="label">
@@ -43,7 +43,7 @@
 					<span>EUR</span>
 				</label>
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
-				<div class="btn btn-primary" on:click={withdraw}>Withdraw Money</div>
+				<div class="btn btn-primary" on:click={withdraw}>Withdraw</div>
 			</div>
 		</div>
 	</div>
