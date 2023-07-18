@@ -1,35 +1,23 @@
 <script lang="ts">
-	import type { BankAccountView } from 'src/bindings/BankAccountView';
-	import { PUBLIC_BANK_ACCOUNT_SERVICE_API_URL } from '$env/static/public';
-	import { onMount } from 'svelte';
+	import type { BankAccountView } from '../bindings/BankAccountView';
+	import { bankAccountStore } from '$lib/bankAccountStore';
 
-	export let accountId: string;
+	export let bankAccount: BankAccountView;
 
-	let bankAccount: BankAccountView = {
-		account_id: '',
-		balance: 0,
-		written_checks: [],
-		account_transactions: []
-	};
+	let showTransactionsCount = 10; // Initial transactions to show
 
-	onMount(async () => {
-		await getBankAccount();
-	});
-
-	export async function getBankAccount() {
-		const response = await fetch(
-			`${PUBLIC_BANK_ACCOUNT_SERVICE_API_URL}/bank-accounts/${accountId}`
-		);
-		const account = await response.json();
-		console.log(account);
-		if (response.status === 200) {
-			bankAccount = account;
-			return;
-		}
+	// Function to load more transactions
+	function loadMoreTransactions() {
+		showTransactionsCount += 10;
 	}
+
+	// Subscribe to store
+	bankAccountStore.subscribe((value) => {
+		bankAccount = value;
+	});
 </script>
 
-<div class="card w-96 bg-base-100 shadow-xl">
+<div class="card min-w-full bg-base-100 shadow-xl">
 	<div class="card-body">
 		<h2 class="card-title">Account Tansactions</h2>
 		<table class="table table-compact w-full">
@@ -40,17 +28,20 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each bankAccount.account_transactions as transaction}
+				{#each [...bankAccount.account_transactions]
+					.reverse()
+					.slice(0, showTransactionsCount) as transaction}
 					<tr>
 						<td>{transaction.description}</td>
 						<td>{transaction.amount}</td>
 					</tr>
 				{/each}
 			</tbody>
-
-			<div class="card-actions justify-end">
-				<button class="btn btn-primary" on:click={getBankAccount}> Refresh </button>
-			</div>
 		</table>
+		{#if bankAccount.account_transactions.length > showTransactionsCount}
+			<div class="justify-center w-full flex flex-auto">
+				<button class="btn btn-primary w-auto" on:click={loadMoreTransactions}>Show More</button>
+			</div>
+		{/if}
 	</div>
 </div>
