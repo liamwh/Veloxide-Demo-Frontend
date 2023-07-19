@@ -19,7 +19,7 @@
 
 <div class="card min-w-full bg-base-100 shadow-xl">
 	<div class="card-body">
-		<h2 class="card-title">Account Tansactions</h2>
+		<h2 class="card-title">Account Transactions</h2>
 		<table class="table table-compact w-full">
 			<thead>
 				<tr>
