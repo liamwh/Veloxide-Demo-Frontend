@@ -18,7 +18,7 @@
 			{#if account}
 				<p>EUR: {account.balance}</p>
 			{:else}
-				<p class="text-error">Not found!</p>
+				<p>Balance loading...</p>
 			{/if}
 			<a href="/payments/{accountId}">
 				<button class="btn btn-primary">View</button>
