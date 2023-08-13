@@ -4,8 +4,7 @@ set dotenv-load := true
 default:
   @just --list --justfile {{justfile()}}
 
-# Generate protos
-protos:
-    protoc --proto_path=. ./protos/helloworld.proto \
-    --ts_out=src/lib
+# Generate protos using protobuf-ts
+gen-protobuf-ts:
+    protoc --proto_path=. ./protos/helloworld.proto --ts_out=src/lib --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts
 
